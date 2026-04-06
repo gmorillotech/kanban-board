@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getOrCreateSession } from './lib/auth'
+import Board from './components/Board'
 
 export default function App() {
   const [ready, setReady] = useState(false)
@@ -13,15 +14,16 @@ export default function App() {
   if (!ready) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-400 text-sm">Loading...</p>
+        <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-2xl font-semibold text-gray-800">Kanban Board</h1>
-      <p className="text-gray-500 mt-1">Auth ready ✓</p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <Board />
+      </div>
     </div>
   )
 }
