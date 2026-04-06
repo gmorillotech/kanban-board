@@ -43,7 +43,9 @@ export default function TaskCard({ task, onDelete, onOpen }: Props) {
       {...attributes}
       {...listeners}
       onMouseDown={() => setDragMoved(false)}
-      onMouseMove={() => setDragMoved(true)}
+      onMouseMove={(e) => {
+        if (e.buttons === 1) setDragMoved(true)
+      }}
       onMouseUp={() => {
         if (!dragMoved && !isDragging) onOpen(task)
       }}
