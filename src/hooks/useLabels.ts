@@ -26,7 +26,9 @@ export function useLabels() {
   }
 
   async function createLabel(name: string, color: string) {
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) throw new Error('No user session')
 
     const { data, error } = await supabase
@@ -36,18 +38,15 @@ export function useLabels() {
       .single()
 
     if (error) throw error
-    setLabels(prev => [...prev, data])
+    setLabels((prev) => [...prev, data])
     return data
   }
 
   async function deleteLabel(id: string) {
-    const { error } = await supabase
-      .from('labels')
-      .delete()
-      .eq('id', id)
+    const { error } = await supabase.from('labels').delete().eq('id', id)
 
     if (error) throw error
-    setLabels(prev => prev.filter(l => l.id !== id))
+    setLabels((prev) => prev.filter((l) => l.id !== id))
   }
 
   async function addLabelToTask(taskId: string, labelId: string) {
@@ -78,5 +77,13 @@ export function useLabels() {
     return (data || []).map((row: any) => row.labels)
   }
 
-  return { labels, loading, createLabel, deleteLabel, addLabelToTask, removeLabelFromTask, getTaskLabels }
+  return {
+    labels,
+    loading,
+    createLabel,
+    deleteLabel,
+    addLabelToTask,
+    removeLabelFromTask,
+    getTaskLabels,
+  }
 }

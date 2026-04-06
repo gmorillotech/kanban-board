@@ -3,8 +3,14 @@ import { useLabels } from '../hooks/useLabels'
 import type { Label } from '../types'
 
 const PRESET_COLORS = [
-  '#6366f1', '#ef4444', '#f59e0b', '#10b981',
-  '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6',
+  '#6366f1',
+  '#ef4444',
+  '#f59e0b',
+  '#10b981',
+  '#3b82f6',
+  '#8b5cf6',
+  '#ec4899',
+  '#14b8a6',
 ]
 
 interface Props {
@@ -13,7 +19,13 @@ interface Props {
 }
 
 export default function LabelManager({ taskId, onLabelsChanged }: Props) {
-  const { labels, createLabel, addLabelToTask, removeLabelFromTask, getTaskLabels } = useLabels()
+  const {
+    labels,
+    createLabel,
+    addLabelToTask,
+    removeLabelFromTask,
+    getTaskLabels,
+  } = useLabels()
   const [taskLabels, setTaskLabels] = useState<Label[]>([])
   const [showCreate, setShowCreate] = useState(false)
   const [newName, setNewName] = useState('')
@@ -24,15 +36,16 @@ export default function LabelManager({ taskId, onLabelsChanged }: Props) {
     getTaskLabels(taskId).then(setTaskLabels)
   }, [taskId])
 
-  const isAttached = (labelId: string) => taskLabels.some(l => l.id === labelId)
+  const isAttached = (labelId: string) =>
+    taskLabels.some((l) => l.id === labelId)
 
   async function toggleLabel(label: Label) {
     if (isAttached(label.id)) {
       await removeLabelFromTask(taskId, label.id)
-      setTaskLabels(prev => prev.filter(l => l.id !== label.id))
+      setTaskLabels((prev) => prev.filter((l) => l.id !== label.id))
     } else {
       await addLabelToTask(taskId, label.id)
-      setTaskLabels(prev => [...prev, label])
+      setTaskLabels((prev) => [...prev, label])
     }
     onLabelsChanged()
   }
@@ -43,7 +56,7 @@ export default function LabelManager({ taskId, onLabelsChanged }: Props) {
       setCreating(true)
       const label = await createLabel(newName.trim(), newColor)
       await addLabelToTask(taskId, label.id)
-      setTaskLabels(prev => [...prev, label])
+      setTaskLabels((prev) => [...prev, label])
       setNewName('')
       setShowCreate(false)
       onLabelsChanged()
@@ -54,11 +67,13 @@ export default function LabelManager({ taskId, onLabelsChanged }: Props) {
 
   return (
     <div>
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Labels</p>
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+        Labels
+      </p>
 
       {/* Existing labels */}
       <div className="flex flex-wrap gap-2 mb-3">
-        {labels.map(label => (
+        {labels.map((label) => (
           <button
             key={label.id}
             onClick={() => toggleLabel(label)}
@@ -67,11 +82,15 @@ export default function LabelManager({ taskId, onLabelsChanged }: Props) {
                 ? 'border-transparent opacity-100'
                 : 'border-gray-200 opacity-50 hover:opacity-75'
             }`}
-            style={isAttached(label.id) ? {
-              backgroundColor: label.color + '20',
-              borderColor: label.color + '40',
-              color: label.color,
-            } : {}}
+            style={
+              isAttached(label.id)
+                ? {
+                    backgroundColor: label.color + '20',
+                    borderColor: label.color + '40',
+                    color: label.color,
+                  }
+                : {}
+            }
           >
             <span
               className="w-2 h-2 rounded-full shrink-0"
@@ -96,18 +115,20 @@ export default function LabelManager({ taskId, onLabelsChanged }: Props) {
           <input
             type="text"
             value={newName}
-            onChange={e => setNewName(e.target.value)}
+            onChange={(e) => setNewName(e.target.value)}
             placeholder="Label name..."
             className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-300 bg-white"
             autoFocus
           />
           <div className="flex gap-2 flex-wrap">
-            {PRESET_COLORS.map(color => (
+            {PRESET_COLORS.map((color) => (
               <button
                 key={color}
                 onClick={() => setNewColor(color)}
                 className={`w-6 h-6 rounded-full transition-transform ${
-                  newColor === color ? 'scale-125 ring-2 ring-offset-1 ring-gray-400' : 'hover:scale-110'
+                  newColor === color
+                    ? 'scale-125 ring-2 ring-offset-1 ring-gray-400'
+                    : 'hover:scale-110'
                 }`}
                 style={{ backgroundColor: color }}
               />
@@ -134,7 +155,7 @@ export default function LabelManager({ taskId, onLabelsChanged }: Props) {
       {/* Attached labels preview */}
       {taskLabels.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-2">
-          {taskLabels.map(label => (
+          {taskLabels.map((label) => (
             <span
               key={label.id}
               className="text-[11px] font-semibold px-2 py-0.5 rounded-full"

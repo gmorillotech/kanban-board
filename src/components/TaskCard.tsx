@@ -1,4 +1,4 @@
-import { useState} from 'react'
+import { useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { Task } from '../types'
@@ -16,10 +16,16 @@ interface Props {
 }
 
 export default function TaskCard({ task, onDelete, onOpen }: Props) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: task.id })
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: task.id })
 
-    const [dragMoved, setDragMoved] = useState(false)
+  const [dragMoved, setDragMoved] = useState(false)
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -38,7 +44,9 @@ export default function TaskCard({ task, onDelete, onOpen }: Props) {
       {...listeners}
       onMouseDown={() => setDragMoved(false)}
       onMouseMove={() => setDragMoved(true)}
-      onMouseUp={() => { if (!dragMoved && !isDragging) onOpen(task) }}
+      onMouseUp={() => {
+        if (!dragMoved && !isDragging) onOpen(task)
+      }}
       className={`
         relative bg-white rounded-xl p-3 border cursor-grab active:cursor-grabbing group
         transition-shadow hover:card-shadow-hover
@@ -51,13 +59,18 @@ export default function TaskCard({ task, onDelete, onOpen }: Props) {
       )}
 
       <div className="flex items-start justify-between gap-2">
-        <p className={`text-sm font-medium leading-snug ${
-          isDone ? 'line-through text-gray-400' : 'text-gray-800'
-        }`}>
+        <p
+          className={`text-sm font-medium leading-snug ${
+            isDone ? 'line-through text-gray-400' : 'text-gray-800'
+          }`}
+        >
           {task.title}
         </p>
         <button
-          onClick={(e) => { e.stopPropagation(); onDelete(task.id) }}
+          onClick={(e) => {
+            e.stopPropagation()
+            onDelete(task.id)
+          }}
           onMouseDown={(e) => e.stopPropagation()}
           className="opacity-0 group-hover:opacity-100 text-gray-200 hover:text-red-400 transition-all shrink-0 text-xs mt-0.5"
         >
@@ -72,29 +85,40 @@ export default function TaskCard({ task, onDelete, onOpen }: Props) {
       )}
 
       <div className="flex items-center gap-1.5 mt-2.5 flex-wrap">
-        <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${PRIORITY_STYLES[task.priority]}`}>
+        <span
+          className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${PRIORITY_STYLES[task.priority]}`}
+        >
           {task.priority}
         </span>
         {task.due_date && (
-          <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
-            isOverdue ? 'bg-red-50 text-red-500' : 'bg-amber-50 text-amber-600'
-          }`}>
+          <span
+            className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+              isOverdue
+                ? 'bg-red-50 text-red-500'
+                : 'bg-amber-50 text-amber-600'
+            }`}
+          >
             {isOverdue ? '⚠ ' : ''}
-            {new Date(task.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            {new Date(task.due_date).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+            })}
           </span>
         )}
-        {task.labels && task.labels.length > 0 && task.labels.map(label => (
-          <span
+        {task.labels &&
+          task.labels.length > 0 &&
+          task.labels.map((label) => (
+            <span
               key={label.id}
               className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
               style={{
-              backgroundColor: label.color + '20',
-              color: label.color,
+                backgroundColor: label.color + '20',
+                color: label.color,
               }}
             >
-            {label.name}
-          </span>
-        ))}
+              {label.name}
+            </span>
+          ))}
       </div>
     </div>
   )

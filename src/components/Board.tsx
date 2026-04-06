@@ -7,15 +7,24 @@ import {
   useSensors,
   closestCorners,
 } from '@dnd-kit/core'
-import { COLUMNS,type Status, type Priority, type Task} from '../types'
+import { COLUMNS, type Status, type Priority, type Task } from '../types'
 import { useTasks } from '../hooks/useTasks'
-import { useLabels} from '../hooks/useLabels'
+import { useLabels } from '../hooks/useLabels'
 import Column from './Column'
 import CreateTaskModal from './CreateTaskModal'
 import TaskDetailPanel from './TaskDetailPanel'
 
 export default function Board() {
-  const { tasks, loading, error, createTask, updateTaskStatus, updateTask, deleteTask, refreshTasks } = useTasks()
+  const {
+    tasks,
+    loading,
+    error,
+    createTask,
+    updateTaskStatus,
+    updateTask,
+    deleteTask,
+    refreshTasks,
+  } = useTasks()
   const [showModal, setShowModal] = useState(false)
   const [search, setSearch] = useState('')
   const { labels } = useLabels()
@@ -31,40 +40,47 @@ export default function Board() {
     const { active, over } = event
     if (!over) return
 
-    const activeTask = tasks.find(t => t.id === active.id)
+    const activeTask = tasks.find((t) => t.id === active.id)
     if (!activeTask) return
 
     const overId = over.id as string
-    const overColumn = COLUMNS.find(c => c.id === overId)
-    const overTask = tasks.find(t => t.id === overId)
+    const overColumn = COLUMNS.find((c) => c.id === overId)
+    const overTask = tasks.find((t) => t.id === overId)
 
     const newStatus: Status = overColumn
       ? overColumn.id
       : overTask
-      ? overTask.status
-      : activeTask.status
+        ? overTask.status
+        : activeTask.status
 
     if (newStatus !== activeTask.status) {
       updateTaskStatus(activeTask.id, newStatus)
     }
   }
 
-  const filteredTasks = tasks.filter(task => {
-    const matchesSearch = task.title.toLowerCase().includes(search.toLowerCase())
-    const matchesPriority = priorityFilter === 'all' || task.priority === priorityFilter
-    const matchesLabel = labelFilter === 'all' || task.labels?.some(l => l.id === labelFilter)
-    return matchesSearch && matchesPriority && matchesLabel})
-
-  const totalTasks = tasks.length
-  const doneTasks = tasks.filter(t => t.status === 'done').length
-  const overdueTasks = tasks.filter(t => 
-    t.due_date && new Date(t.due_date) < new Date() && t.status !== 'done'
-    ).length
-
-  const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long', month: 'long', day: 'numeric'
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch = task.title
+      .toLowerCase()
+      .includes(search.toLowerCase())
+    const matchesPriority =
+      priorityFilter === 'all' || task.priority === priorityFilter
+    const matchesLabel =
+      labelFilter === 'all' || task.labels?.some((l) => l.id === labelFilter)
+    return matchesSearch && matchesPriority && matchesLabel
   })
 
+  const totalTasks = tasks.length
+  const doneTasks = tasks.filter((t) => t.status === 'done').length
+  const overdueTasks = tasks.filter(
+    (t) =>
+      t.due_date && new Date(t.due_date) < new Date() && t.status !== 'done'
+  ).length
+
+  const today = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  })
 
   if (loading) {
     return (
@@ -98,96 +114,116 @@ export default function Board() {
         </button>
       </div>
 
-        {/* Stats + Search bar */}
-        <div className="flex items-center gap-3 mb-6 flex-wrap">
+      {/* Stats + Search bar */}
+      <div className="flex items-center gap-3 mb-6 flex-wrap">
         {/* Stats */}
         <div className="flex items-center gap-1.5 bg-white border border-gray-100 rounded-lg px-3 py-1.5 text-sm card-shadow">
-            <span className="font-semibold text-gray-900">{totalTasks}</span>
-            <span className="text-gray-400">total</span>
+          <span className="font-semibold text-gray-900">{totalTasks}</span>
+          <span className="text-gray-400">total</span>
         </div>
         <div className="flex items-center gap-1.5 bg-white border border-gray-100 rounded-lg px-3 py-1.5 text-sm card-shadow">
-            <span className="font-semibold text-green-600">{doneTasks}</span>
-            <span className="text-gray-400">done</span>
+          <span className="font-semibold text-green-600">{doneTasks}</span>
+          <span className="text-gray-400">done</span>
         </div>
         {overdueTasks > 0 && (
-        <div className="flex items-center gap-1.5 bg-red-50 border border-red-100 rounded-lg px-3 py-1.5 text-sm card-shadow">
+          <div className="flex items-center gap-1.5 bg-red-50 border border-red-100 rounded-lg px-3 py-1.5 text-sm card-shadow">
             <span className="font-semibold text-red-600">{overdueTasks}</span>
             <span className="text-red-400">overdue</span>
-        </div>
+          </div>
         )}
 
-  {/* Divider */}
-  <div className="w-px h-5 bg-gray-200 mx-1" />
+        {/* Divider */}
+        <div className="w-px h-5 bg-gray-200 mx-1" />
 
-  {/* Search */}
-  <div className="relative">
-    <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-300" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-    </svg>
-    <input
-      type="text"
-      placeholder="Search tasks..."
-      value={search}
-      onChange={e => setSearch(e.target.value)}
-      className="pl-8 pr-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent w-48 placeholder-gray-300"
-    />
-  </div>
+        {/* Search */}
+        <div className="relative">
+          <svg
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-300"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-8 pr-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent w-48 placeholder-gray-300"
+          />
+        </div>
 
-    {/* Priority filter */}
-    <select
-        value={priorityFilter}
-        onChange={e => setPriorityFilter(e.target.value as Priority | 'all')}
-        className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent text-gray-600"
-    >
-        <option value="all">All priorities</option>
-        <option value="high">High</option>
-        <option value="medium">Medium</option>
-        <option value="low">Low</option>
-    </select>
-
-    {/* Label filter */}
-    {labels.length > 0 &&(
-      <select
-        value={labelFilter}
-        onChange={e => setLabelFilter(e.target.value)}
-        className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent text-gray-600"
-      >
-        <option value="all">All labels</option>
-        {labels.map(label => (
-        <option key={label.id} value={label.id}>{label.name}</option>
-      ))}
-      </select>
-    )}
-
-
-    {/* Clear filters */}
-    {(search || priorityFilter !== 'all') && (
-        <button
-        onClick={() => { setSearch(''); setPriorityFilter('all'); setLabelFilter('all')}}
-        className="text-xs text-brand-500 hover:text-brand-600 font-medium"
+        {/* Priority filter */}
+        <select
+          value={priorityFilter}
+          onChange={(e) =>
+            setPriorityFilter(e.target.value as Priority | 'all')
+          }
+          className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent text-gray-600"
         >
-        Clear filters
-        </button>
-    )}
-    </div>
+          <option value="all">All priorities</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+
+        {/* Label filter */}
+        {labels.length > 0 && (
+          <select
+            value={labelFilter}
+            onChange={(e) => setLabelFilter(e.target.value)}
+            className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent text-gray-600"
+          >
+            <option value="all">All labels</option>
+            {labels.map((label) => (
+              <option key={label.id} value={label.id}>
+                {label.name}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {/* Clear filters */}
+        {(search || priorityFilter !== 'all') && (
+          <button
+            onClick={() => {
+              setSearch('')
+              setPriorityFilter('all')
+              setLabelFilter('all')
+            }}
+            className="text-xs text-brand-500 hover:text-brand-600 font-medium"
+          >
+            Clear filters
+          </button>
+        )}
+      </div>
 
       {/* Board */}
-      <DndContext 
-      sensors={sensors} 
-      collisionDetection={closestCorners} 
-      onDragEnd={handleDragEnd}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragEnd={handleDragEnd}
       >
         <div className="grid grid-cols-4 gap-4">
-          {COLUMNS.map(col => (
+          {COLUMNS.map((col) => (
             <Column
               key={col.id}
               id={col.id}
               label={col.title}
-              tasks={filteredTasks.filter(t => t.status === col.id)}
+              tasks={filteredTasks.filter((t) => t.status === col.id)}
               onDelete={deleteTask}
               onAddTask={() => setShowModal(true)}
               onOpen={setSelectedTask}
-              isFiltering={search !== '' || priorityFilter !== 'all' || labelFilter !== 'all'}
+              isFiltering={
+                search !== '' ||
+                priorityFilter !== 'all' ||
+                labelFilter !== 'all'
+              }
             />
           ))}
         </div>
@@ -197,7 +233,7 @@ export default function Board() {
         <TaskDetailPanel
           task={selectedTask}
           onClose={() => setSelectedTask(null)}
-          onUpdate={async (id, updates) =>{
+          onUpdate={async (id, updates) => {
             const updated = await updateTask(id, updates)
             setSelectedTask(updated)
           }}

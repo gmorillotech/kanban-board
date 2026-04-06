@@ -8,7 +8,7 @@ export default function App() {
   useEffect(() => {
     getOrCreateSession()
       .then(() => setReady(true))
-      .catch(err => console.error('Auth error:', err))
+      .catch((err) => console.error('Auth error:', err))
   }, [])
 
   if (!ready) {
@@ -28,13 +28,39 @@ export default function App() {
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 bg-brand-500 rounded-lg flex items-center justify-center">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <rect x="1" y="1" width="5" height="5" rx="1.5" fill="white"/>
-                <rect x="8" y="1" width="5" height="5" rx="1.5" fill="white" opacity="0.6"/>
-                <rect x="1" y="8" width="5" height="5" rx="1.5" fill="white" opacity="0.6"/>
-                <rect x="8" y="8" width="5" height="5" rx="1.5" fill="white" opacity="0.3"/>
+                <rect x="1" y="1" width="5" height="5" rx="1.5" fill="white" />
+                <rect
+                  x="8"
+                  y="1"
+                  width="5"
+                  height="5"
+                  rx="1.5"
+                  fill="white"
+                  opacity="0.6"
+                />
+                <rect
+                  x="1"
+                  y="8"
+                  width="5"
+                  height="5"
+                  rx="1.5"
+                  fill="white"
+                  opacity="0.6"
+                />
+                <rect
+                  x="8"
+                  y="8"
+                  width="5"
+                  height="5"
+                  rx="1.5"
+                  fill="white"
+                  opacity="0.3"
+                />
               </svg>
             </div>
-            <span className="font-semibold text-gray-900 text-[15px]">TaskFlow</span>
+            <span className="font-semibold text-gray-900 text-[15px]">
+              TaskFlow
+            </span>
           </div>
         </div>
 

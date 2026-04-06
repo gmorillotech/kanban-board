@@ -66,7 +66,7 @@ export default function CreateTaskModal({ onClose, onCreate }: Props) {
               autoFocus
               type="text"
               value={title}
-              onChange={e => setTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="What needs to be done?"
               className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent transition-all"
             />
@@ -79,7 +79,7 @@ export default function CreateTaskModal({ onClose, onCreate }: Props) {
             </label>
             <textarea
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Add more details..."
               rows={3}
               className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent transition-all resize-none"
@@ -94,7 +94,7 @@ export default function CreateTaskModal({ onClose, onCreate }: Props) {
               </label>
               <select
                 value={priority}
-                onChange={e => setPriority(e.target.value as Priority)}
+                onChange={(e) => setPriority(e.target.value as Priority)}
                 className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent transition-all"
               >
                 <option value="low">Low</option>
@@ -109,14 +109,16 @@ export default function CreateTaskModal({ onClose, onCreate }: Props) {
               <input
                 type="date"
                 value={dueDate}
-                onChange={e => setDueDate(e.target.value)}
+                onChange={(e) => setDueDate(e.target.value)}
                 className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent transition-all"
               />
             </div>
           </div>
 
           {error && (
-            <p className="text-red-500 text-xs bg-red-50 px-3 py-2 rounded-lg">{error}</p>
+            <p className="text-red-500 text-xs bg-red-50 px-3 py-2 rounded-lg">
+              {error}
+            </p>
           )}
 
           {/* Actions */}

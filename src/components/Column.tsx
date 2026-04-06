@@ -3,16 +3,39 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import type { Task, Status } from '../types'
 import TaskCard from './TaskCard'
 
-const COLUMN_CONFIG: Record<Status, {
-  dot: string
-  countBg: string
-  countText: string
-  dropBg: string
-}> = {
-  todo:        { dot: 'bg-gray-400',   countBg: 'bg-gray-100',    countText: 'text-gray-600',  dropBg: 'bg-gray-50' },
-  in_progress: { dot: 'bg-brand-500',  countBg: 'bg-brand-50',    countText: 'text-brand-600', dropBg: 'bg-brand-50/40' },
-  in_review:   { dot: 'bg-amber-400',  countBg: 'bg-amber-50',    countText: 'text-amber-600', dropBg: 'bg-amber-50/40' },
-  done:        { dot: 'bg-green-500',  countBg: 'bg-green-50',    countText: 'text-green-600', dropBg: 'bg-green-50/40' },
+const COLUMN_CONFIG: Record<
+  Status,
+  {
+    dot: string
+    countBg: string
+    countText: string
+    dropBg: string
+  }
+> = {
+  todo: {
+    dot: 'bg-gray-400',
+    countBg: 'bg-gray-100',
+    countText: 'text-gray-600',
+    dropBg: 'bg-gray-50',
+  },
+  in_progress: {
+    dot: 'bg-brand-500',
+    countBg: 'bg-brand-50',
+    countText: 'text-brand-600',
+    dropBg: 'bg-brand-50/40',
+  },
+  in_review: {
+    dot: 'bg-amber-400',
+    countBg: 'bg-amber-50',
+    countText: 'text-amber-600',
+    dropBg: 'bg-amber-50/40',
+  },
+  done: {
+    dot: 'bg-green-500',
+    countBg: 'bg-green-50',
+    countText: 'text-green-600',
+    dropBg: 'bg-green-50/40',
+  },
 }
 
 interface Props {
@@ -25,7 +48,15 @@ interface Props {
   isFiltering?: boolean
 }
 
-export default function Column({ id, label, tasks, onDelete, onAddTask, onOpen, isFiltering }: Props) {
+export default function Column({
+  id,
+  label,
+  tasks,
+  onDelete,
+  onAddTask,
+  onOpen,
+  isFiltering,
+}: Props) {
   const { setNodeRef, isOver } = useDroppable({ id })
   const cfg = COLUMN_CONFIG[id]
 
@@ -37,7 +68,9 @@ export default function Column({ id, label, tasks, onDelete, onAddTask, onOpen, 
           <span className={`w-2 h-2 rounded-full ${cfg.dot}`} />
           <h2 className="text-sm font-semibold text-gray-700">{label}</h2>
         </div>
-        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${cfg.countBg} ${cfg.countText}`}>
+        <span
+          className={`text-xs font-semibold px-2 py-0.5 rounded-full ${cfg.countBg} ${cfg.countText}`}
+        >
           {tasks.length}
         </span>
       </div>
@@ -49,16 +82,25 @@ export default function Column({ id, label, tasks, onDelete, onAddTask, onOpen, 
           isOver ? cfg.dropBg + ' ring-1 ring-inset ring-brand-200' : ''
         }`}
       >
-        <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
-          {tasks.map(task => (
-            <TaskCard key={task.id} task={task} onDelete={onDelete} onOpen={onOpen} />
+        <SortableContext
+          items={tasks.map((t) => t.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onDelete={onDelete}
+              onOpen={onOpen}
+            />
           ))}
         </SortableContext>
 
         {tasks.length === 0 && (
           <div className="flex-1 flex items-center justify-center min-h-[120px]">
             <p className="text-xs text-gray-200">
-              {isFiltering ? 'No matches': 'Drop tasks here'}</p>
+              {isFiltering ? 'No matches' : 'Drop tasks here'}
+            </p>
           </div>
         )}
       </div>
