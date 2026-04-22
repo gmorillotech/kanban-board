@@ -4,8 +4,6 @@ A beautiful, fully-featured Kanban-style task management board built with React,
 
 🔗 **Live Demo:** [kanban-board-one-green.vercel.app](https://kanban-board-one-green.vercel.app)
 
-![TaskFlow Board](https://via.placeholder.com/900x500/f8f7f4/6366f1?text=TaskFlow+Kanban+Board)
-
 ---
 
 ## Features
